@@ -1,12 +1,12 @@
 /**
- * webapp-template - Your webapp
+ * tsiram - Your webapp
  * © 2023 Brian Gormanly
  *
  */
 
 
 /**
- * Wrapper for webapp-template API responses. Payload contains data to be transported, message and error provide unified 
+ * Wrapper for tsiram API responses. Payload contains data to be transported, message and error provide unified 
  * mechanism for communnication with UI or API client.
  */
 class ApiMessage{
@@ -27,7 +27,7 @@ class ApiMessage{
  * @param {number} statusCode 
  * @param {string} messageTitle 
  * @param {string} messageBody 
- * @returns webapp-template's API Error response
+ * @returns tsiram's API Error response
  */
 exports.createApiMessage = ( statusCode, messageTitle, messageBody ) => {
     return new ApiMessage( statusCode, messageTitle, messageBody );

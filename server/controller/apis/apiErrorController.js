@@ -8,8 +8,8 @@
 exports.errorController = ( error, res ) => {
 
     if( res ) {
-        res.set( "x-webapp-template-message-title", error.messageTitle );
-        res.set( "x-webapp-template-message-detail", error.messageBody );
+        res.set( "x-tsiram-message-title", error.messageTitle );
+        res.set( "x-tsiram-message-detail", error.messageBody );
 
         return res.status( error.statusCode ).json( error );
     }
