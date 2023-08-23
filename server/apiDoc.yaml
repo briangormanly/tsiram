@@ -1,0 +1,930 @@
+openapi: 3.0.2
+info:
+  title: webapp-template API
+  version: 1.0.0
+  description: webapp-template's super cool API. You can find out more about webapp-template at [https://freewebapp-template.org](https://freewebapp-template.org)
+  termsOfService: https://freewebapp-template.org/terms/
+  contact:
+    email: api@freewebapp-template.org
+  license:
+    name: BSD 3-Clause License
+    url: https://opensource.org/licenses/BSD-3-Clause
+tags:
+  - name: Tags
+    description: Manage global tags, tags are used to relate other entities and are associated to enities by users using the Tagged object.
+paths:
+  /tags:
+    get:
+      tags:
+        - Tags
+      summary: Retrieves all available tags, provide limit and offset for pagnation, top limit 100.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The number of records to return, maximum 100
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The starting record number, defaults to 0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tag"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    post:
+      tags:
+        - Tags
+      summary: Save a new tag. If the name of the tag already exists the current tag will not be duplicated. If the ownedBy member is provided with an existing tag name the owner will be updated to the provided value.  Only the tag value is required.
+      requestBody:
+        description: Include a Tag object to save in JSON format *NOTE* - Only the tag member is required, id will be ignored, lastUsed will be used if provided and override the default behavior of assigning the authenticed user id, lastUsed will be updated to the current time.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/ShortTag"
+      responses:
+        "201":
+          description: New Tag created
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tag"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "200":
+          description: Updated existing record - the tag name already existed, current record used.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tag"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+  /tags/{id}:
+    get:
+      tags:
+        - Tags
+      summary: Retrieves existing tag by Id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the tag to retrieve
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tag"
+        headers:
+          x-webapp-template-message-title:
+            schema:
+              type: string
+            description: Title of webapp-template API message
+          x-webapp-template-message-message:
+            schema:
+              type: string
+            description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      tags:
+        - Tags
+      summary: Deletes existing tag by Id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the tag to delete
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tag"
+        headers:
+          x-webapp-template-message-title:
+            schema:
+              type: string
+            description: Title of webapp-template API message
+          x-webapp-template-message-message:
+            schema:
+              type: string
+            description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /tags/Tagged:
+    post:
+      tags:
+        - Tagged
+      summary: Associates a tag with an entity (by provided type and id), and a user (by user id). 
+      requestBody:
+        description: Include a Tagged object to save in JSON format including a tag property with the .tag property containing the name of the tag *NOTE* - For the Tag object, only the tag member is required, id will be ignored, lastUsed will be used if provided and override the default behavior of assigning the authenticed user id, lastUsed will be updated to the current time.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Tagged"
+      responses:
+        "201":
+          description: New Tag association created
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tagged"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "200":
+          description: Updated existing record - the tag association already existed, current record used.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tagged"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+  /tags/tagged/{entityType}/{entityId}:
+    get:
+      tags:
+        - Tagged
+      summary: Retrieves Tags associated with an entity (by type and id)
+      parameters:
+        - in: path
+          name: entityType
+          schema:
+            type: string
+            enum: ["unknown", "workspace", "topic", "resource", "user"]
+            default: "unknown"
+            description: Type of the entity to find associated tags for
+        - in: path
+          name: entityId
+          schema:
+            type: integer
+            description: id of the entity to find associated tags for
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tags"
+        headers:
+          x-webapp-template-message-title:
+            schema:
+              type: string
+            description: Title of webapp-template API message
+          x-webapp-template-message-message:
+            schema:
+              type: string
+            description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /tags/tagged/{tag}/{entityType}/{entityId}:
+    delete:
+      tags:
+        - Tagged
+      summary: Deletes a tag association, removing the tag (tagName) from an entity (by entityType, entityId) for owner (authorized api or client session user)
+      parameters:
+        - in: path
+          name: tag (tag name)
+          schema:
+            type: string
+            description: name given to tag to remove the association from
+        - in: path
+          name: entityType
+          schema:
+            type: string
+            enum: ["unknown", "workspace", "topic", "resource", "user"]
+            default: "unknown"
+            description: Type of the entity to remove the association from
+        - in: path
+          name: entityId
+          schema:
+            type: integer
+            description: id of the entity to remove the association from
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Tag"
+        headers:
+          x-webapp-template-message-title:
+            schema:
+              type: string
+            description: Title of webapp-template API message
+          x-webapp-template-message-message:
+            schema:
+              type: string
+            description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  
+  /discussions/workspace/{id}:
+    get:
+      tags:
+        - Discussions
+      summary: Gets the discussion by workspace ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the workspace
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Discussions"
+        headers:
+          x-webapp-template-message-title:
+            schema:
+              type: string
+            description: Title of webapp-template API message
+          x-webapp-template-message-message:
+            schema:
+              type: string
+            description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    patch:
+      tags:
+        - Discussions
+      summary: "Updates discussion using workspace ID"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the workspace
+      requestBody:
+        description: Json for updated text
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                discussion_text:
+                  type: string
+                  description: Text that you wish to update
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Discussions"
+        headers:
+          x-webapp-template-message-title:
+            schema:
+              type: string
+            description: Title of webapp-template API message
+          x-webapp-template-message-message:
+            schema:
+              type: string
+            description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    post:
+      tags:
+        - Discussions
+      summary: "Create a new discussion using workspace ID"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the workspace
+      requestBody:
+        description: Json for new text
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                discussion_text:
+                  type: string
+                  description: Text that you wish to start the discussion with
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Discussions"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /discussions/topic/{id}:
+    get:
+      tags:
+        - Discussions
+      summary: Gets the discussion by topic ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the topic
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Discussions"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    patch:
+      tags:
+        - Discussions
+      summary: "Updates discussion using topic ID"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the topic
+      requestBody:
+        description: Json for updated text
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                discussion_text:
+                  type: string
+                  description: Text that you wish to update
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Discussions"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    post:
+      tags:
+        - Discussions
+      summary: "Create a new discussion using topic id"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the topic
+      requestBody:
+        description: Json for updated text
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: Text that you wish to update
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Discussions"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /discussions/rating/{commentid}:
+    post:
+      tags:
+        - Discussions
+      summary: "Posts the rating for a specific comment"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the comment
+      requestBody:
+        description: Rating JSON
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: boolean
+                userId:
+                  type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Comment"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      tags:
+        - Discussions
+      summary: "Removes the rating for a comment"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the comment
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Comment"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /discussions/comment:
+    post:
+      tags:
+        - Discussions
+      summary: "Post a new comment"
+      requestBody:
+        description: Comment JSON requestBody
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Comment"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Comment"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /discussions/comment/{id}:
+    patch:
+      tags:
+        - Discussions
+      summary: "Change a currently existing comment"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the comment
+      requestBody:
+        description: Comment edit JSON object
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                comment_text:
+                  type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Comment"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      tags:
+        - Discussions
+      summary: "Deletes a currently existing comment"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the comment
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Comment"
+          headers:
+            x-webapp-template-message-title:
+              schema:
+                type: string
+              description: Title of webapp-template API message
+            x-webapp-template-message-message:
+              schema:
+                type: string
+              description: Message of webapp-template API message
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+servers:
+  - url: http://localhost:1986/api/v1/auth
+  - url: http://freewebapp-template.org/api/v1/auth
+components:
+  securitySchemes:
+    basicAuth: # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+  schemas:
+    ShortTag:
+      type: object
+      required:
+        - tag
+      properties:
+        id:
+          type: integer
+          description: Assigned automatically for new tags, used to update existing tag if provided
+        tag:
+          type: string
+          description: The tag name
+        ownedBy:
+          type: integer
+          description: Id of the user that first generated the tag
+        lastUsed:
+          type: string
+          description: date the tag was last used or updated. This should be set to the current time any time a tag is applied using the tagged object
+      example:
+        tag: Learning Python
+    Tag:
+      type: object
+      required:
+        - tag
+      properties:
+        id:
+          type: integer
+          description: Assigned automatically for new tags, used to update existing tag if provided
+        tag:
+          type: string
+          description: The tag name
+        ownedBy:
+          type: integer
+          description: Id of the user that first generated the tag
+        lastUsed:
+          type: string
+          description: date the tag was last used or updated. This should be set to the current time any time a tag is applied using the tagged object
+      example:
+        id: -1
+        tag: Learning Python
+        ownedBy: 1
+        lastUsed: 2022-08-07T14:04:17.935Z
+    Tags:
+      type: array
+      items:
+        $ref: "#/components/schemas/Tag"
+    Tagged:
+      type: object
+      required:
+        - tag
+        - entityType
+        - entityId
+      properties:
+        id:
+          type: integer
+          description: Assigned automatically for new tags, used to update existing tag if provided
+        tag:
+          type: object
+          $ref: "#/components/schemas/Tag"
+          description: Tag that is being associated with a user and entity, Tag.tag property should contain the name of the tag to associate
+        entityType:
+          type: string
+          enum: ["unknown", "workspace", "topic", "resource", "user"]
+          default: "unknown"
+          description: Type of the entity that is being associated with the tag
+        entityId:
+          type: integer
+          description: Id of the entity that is being associated with the tag
+        userId:
+          type: integer
+          description: Id of the user that is associating this tag to the entity
+        lookupCount:
+          type: integer
+          description: incremented when user finds entity association via this tag, tracks popularity of this tag
+        lastUsed:
+          type: string
+          description: date the tag was last used or updated. This should be set to the current time any time a tag is applied using the tagged object, will be automatically set when saved
+        active:
+          type: boolean
+          description: Active status, inactive items will not be returned in most queries
+      example:
+        id: -1
+        tag: 
+          id: -1
+          tag: Learning Python
+          ownedBy: 1
+          lastUsed: 2022-08-07T14:04:17.935Z
+        entityType: "resource"
+        entityId: 1
+        userId: 1
+        lookupCount: -1
+        lastUsed: 2022-08-07T14:04:17.935Z
+        active: true
+  responses:
+    BadRequest:
+      description: The HyperText Transfer Protocol (HTTP) 400 Bad Request response status code indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing). See the x-webapp-template-message-title and x-webapp-template-message-detail response parameters for more detail.
+      headers:
+        x-webapp-template-message-title:
+          schema:
+            type: string
+          description: Title of webapp-template API message
+        x-webapp-template-message-message:
+          schema:
+            type: string
+          description: Message of webapp-template API message
+    UnauthorizedError:
+      description: Authentication information is missing or invalid - In basic HTTP authentication, a request contains a header field in the form of Authorization - Basic <credentials>, where credentials is the Base64 encoding of ID and password joined by a single colon. See the x-webapp-template-message-title and x-webapp-template-message-detail response parameters for more detail.
+      headers:
+        x-webapp-template-message-title:
+          schema:
+            type: string
+          description: Title of webapp-template API message
+        x-webapp-template-message-message:
+          schema:
+            type: string
+          description: Message of webapp-template API message
+    ForbiddenError:
+      description: The credentials provided in the Authorization header did not authorize the user to take the requested action. See the x-webapp-template-message-title and x-webapp-template-message-detail response parameters for more detail.
+      headers:
+        x-webapp-template-message-title:
+          schema:
+            type: string
+          description: Title of webapp-template API message
+        x-webapp-template-message-message:
+          schema:
+            type: string
+          description: Message of webapp-template API message
+    NotFoundError:
+      description: The requested resource was not found. Check id provided or see the x-webapp-template-message-title and x-webapp-template-message-detail response parameters for more detail.
+      headers:
+        x-webapp-template-message-title:
+          schema:
+            type: string
+          description: Title of webapp-template API message
+        x-webapp-template-message-message:
+          schema:
+            type: string
+          description: Message of webapp-template API message
+security:
+  - basicAuth: []

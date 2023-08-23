@@ -1,0 +1,183 @@
+/**
+ * webapp-template - Your webapp
+ * © 2023 Brian Gormanly
+ * BSD 3-Clause License
+ * see included LICENSE or https://opensource.org/licenses/BSD-3-Clause
+ */
+
+// import and initizialize express
+const express = require( "express" );
+const app = express();
+
+// config env library setup
+require( "dotenv" ).config();
+
+// manage parsing json from body of the request
+const bodyParser = require( "body-parser" );
+var path = require( "path" );
+
+app.use(
+    bodyParser.urlencoded( {
+        extended: true,
+    } )
+);
+app.use( bodyParser.json() );
+
+// cross origin
+const cors = require( "cors" );
+app.use(
+    cors( {
+        origin: "*",
+        methods: [ "GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH" ],
+    } )
+);
+
+// get the port from the env file or set 1986 as default
+const PORT = process.env.SITE_PORT || 1986;
+
+// set the view engine to ejs
+app.set( "view engine", "ejs" );
+
+// get the view path for the front end configured
+const viewPath = "../client/" + process.env.FRONT_END_NAME + "/views";
+const publicPath = "client/" + process.env.FRONT_END_NAME + "/public";
+
+app.set( "views", path.join( __dirname, viewPath ) );
+
+// open up the resources publically
+app.use( express.static( publicPath ) );
+
+// import uuid generator
+const { v4: uuidv4 } = require( "uuid" );
+
+// set up session
+let session = require( "express-session" );
+const pgSession = require( "connect-pg-simple" )( session );
+
+// database connection
+const db = require( "./db/connection" );
+
+/**
+ * OpenAPI / Swagger
+ */
+const swaggerUi = require( "swagger-ui-express" );
+const swaggerJsDoc = require( "swagger-jsdoc" );
+
+// global swagger info (TODO: maybe this should be moved into another file if it is staying?)
+const YAML = require( "yamljs" );
+const swaggerApiDoc = YAML.load( "./server/apiDoc.yaml" );
+
+// initialize swagger
+//const swaggerDocInit = swaggerJsDoc( swaggerGlobal );
+app.use( "/api-docs", swaggerUi.serve, swaggerUi.setup( swaggerApiDoc ) );
+
+let sess = {
+    store: new pgSession( {
+        pool: db.pool(), // Connection pool
+        tableName: "session", // Use another table-name than the default "session" one
+    // Insert connect-pg-simple options here
+    } ),
+    genid: function ( req ) {
+        return uuidv4(); // use UUIDs for session IDs
+    },
+    resave: false,
+    saveUninitialized: true,
+    secret: `${process.env.SESSION_SECRET}`,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 6, // 6 hours
+        sameSite: "lax",
+        secure: false,
+    },
+};
+
+if ( app.get( "env" ) === "production" ) {
+    app.set( "trust proxy", 1 ); // trust first proxy
+    sess.cookie.secure = true; // serve secure cookies
+}
+
+app.use( session( sess ) );
+
+// check that the user is logged in, if so include user data in req for view
+app.use( function ( req, res, next ) {
+    // set the currentUrl so it is available in the esj
+    res.locals.currentUrl = encodeURIComponent( req.url );
+
+    // if authenticated set the session as a local of the esj
+    if ( !req.session.isAuth ) {
+        next();
+    }
+    else {
+        res.locals.authUser = req.session.authUser;
+        next();
+    }
+} );
+
+
+
+
+
+/**
+ * Page routes
+ */
+const pageRoutes = require( "./routes/pagesRoutes" );
+app.use( "/", pageRoutes );
+
+/**
+ * Auth routes
+ */
+const authRoutes = require( "./routes/authRoutes" );
+app.use( "/", authRoutes );
+
+/**
+ * User routes
+ */
+const userRoutes = require( "./routes/userRoutes" );
+app.use( "/user", userRoutes );
+
+
+/**
+ * Profile routes
+ */
+const profileRoutes = require( "./routes/profileRoutes" );
+app.use( "/profile", profileRoutes );
+
+/**
+ * User Dashboard routes
+ */
+const dashboardRoutes = require( "./routes/dashboardRoutes" );
+app.use( "/dashboard", dashboardRoutes );
+
+
+/**
+ * API Routes
+ * API master route file, requires each individual API routing file
+ */
+const apiAuthRoutes = require( "./routes/apiAuthRoutes" );
+app.use( "/api/v1/auth", apiAuthRoutes );
+
+/**
+ * Un-authorized / un-secure API Routes
+ * API master route file for open APIs, requires each individual API routing file
+ */
+const apiUnauthRoutes = require( "./routes/apiUnauthRoutes" );
+const { errorController } = require( "./controller/apis/apiErrorController" );
+const ApiMessage = require( "./model/util/ApiMessage" );
+app.use( "/api/v1/open", apiUnauthRoutes );
+
+
+
+app.use( ( error, req, res, next ) => {
+    console.error( error );
+    return errorController( ApiMessage.createInternalServerError(), res );
+} );
+
+app.listen( PORT, () =>
+    console.log(
+        "webapp-template running... {" +
+      process.env.SITE_PROTOCOL +
+      process.env.SITE_HOST +
+      ":" +
+      PORT +
+      "}"
+    )
+);
