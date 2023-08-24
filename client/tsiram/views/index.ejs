@@ -5,33 +5,26 @@
     </head>
     <body id="page-top">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <nav class="navbar menu-bg navbar-expand-lg fixed-top" id="mainNav">
             <%- include('./partials/topmenu'); %>
         </nav>
         <!-- Masthead-->
         <content>
-            <div class="header-container bg-primary">
-                <header class="masthead text-white text-center main-content" style="height:100%">
+            <div class="bg-primary">
+                <header class="masthead text-center main-content" style="height:100%">
                     <div class="d-flex align-items-center flex-column">
         
                         <div class="row">
-                            <div class="col-lg-6 order-lg-1">
+                            <div class="col-lg-12 order-lg-1">
                                 <!-- Masthead Heading-->
-                                <h1 class="masthead-heading text-uppercase mb-0 tsiram-font-large">tsiram</h1>
-                                
-                                </br></br>
-                                <p>Quisque tincidunt dui magna, in aliquet quam euismod at. Sed at odio volutpat, posuere enim et, condimentum nunc. Praesent congue, nisl non porta tincidunt, est massa euismod est, nec dictum erat ipsum eu sem. Quisque auctor nec risus non aliquet. Morbi at nibh at erat maximus dignissim.</p>
-
-<p>Vestibulum interdum lectus nec neque ultrices, at posuere turpis posuere. Quisque vitae lacus sed velit fermentum cursus. Sed gravida orci ut arcu pretium, nec faucibus orci congue. Proin lacinia ante ac massa aliquam, eu tempus orci tincidunt. Fusce eu porta erat, sed luctus erat.</p>
-
-                            
-                                </br></br>
-                                <a class="masthead-subheading homepageButton" href="/dashboard">Get Started</a>
-                                </br></br>
+                                <h3 class="masthead-heading text-uppercase mb-0 tsiram-font-large">Welcome Students for the Fall of 2023!</h3>
+                                <br />                               
+                                <img class="" src="/assets/img/logos/0.75x/tsiram-logo@0.75x.png" alt="Tsiram Fox Logo">
+                                <br />
+                                <a class="masthead-subheading homepageButton" href="/dashboard">Courses / Resources</a>
+                                </br>
                             </div>
-                            <div class="col-lg-6 order-lg-2">
-                                <img class="website-image website-image-95" src="/assets/img/home/homepage-2.png"/>
-                            </div>
+
                         </div>
                     </div>
                 </header>
@@ -39,19 +32,31 @@
             
             <!-- Portfolio Section-->
             <section class="page-section portfolio text-center main-content mt-3" id="portfolio">
+
+                <div class="divider-custom">
+                    <div class="divider-custom-line divider-bg-color"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-school divider-color"></i></div>
+                    <div class="divider-custom-line divider-bg-color"></div>
+                </div>
+                
                
                 <div class="row">
                     <div class="col-lg-5 order-lg-3">
-                        <img class="website-image website-image-95" src="/assets/img/home/homepage-3.png"/>
+                        <img class="website-image website-image-95" src="/assets/img/home/henry-robot.png"/>
                     </div>
                     <div class="col-lg-7 order-lg-4">
                         <i class="fas fa-chalkboard-teacher fa-8x text-primary"></i>
-                        <h4 class="tsiram-font">tsiram for your notes</h4></br>
-                        <h5 class="tsiram-font analogous2">Do Something!</h5>
-                        <h5 class="tsiram-font analogous2">Important! (or not, your choice)</h5>
-                        <p>Duis dapibus, diam sit amet fermentum scelerisque, tortor turpis tempor lectus, a tincidunt massa mauris at tortor. Maecenas auctor neque sed risus tincidunt, sit amet scelerisque sapien laoreet. Sed vitae egestas magna, nec efficitur dui. Mauris sollicitudin lorem non ipsum condimentum, eu pharetra velit iaculis.</p>
-
-<p>Aliquam erat volutpat. Phasellus ut metus dui. Sed ac nunc at leo consequat volutpat. Sed auctor, mi in auctor lobortis, metus velit efficitur nunc, nec convallis libero lacus sit amet nibh. Fusce luctus nisl sed libero consectetur, non condimentum dolor tincidunt.</p>
+                        <h4 class="tsiram-font">Courses and Resources</h4></br>
+                        <h5 class="tsiram-font analogous2">Welcome students</h5>
+                        <h5 class="tsiram-font analogous2">No matter where you are from!</h5>
+                        <p class="left">Find course material here, videos, notes, resources, assignments and more.</p>
+                        <p class="left"><strong>Current Courses:</strong></p>
+                        <ul class="item-list">
+                            <li>Computer Organization and Architecture</li>
+                            <li>Undergraduate Capping</li>
+                            <li>Graduate Capping</li>
+                        </ul>
+                        <a class="masthead-subheading homepageButton" href="/courses">Courses / Resources</a>
                     </div>
                 </div>
                 
@@ -61,7 +66,35 @@
                     <div class="divider-custom-icon"><i class="fas fa-code-branch divider-color"></i></div>
                     <div class="divider-custom-line divider-bg-color"></div>
                 </div>
-                <h2 class="page-section-heading text-center text-uppercase text-primary mb-3 pt-0"><a href="/dashboard">Create your account Today!</a> </h2>
+
+
+                <div class="row">
+                    
+                    <div class="col col-lg-7 order-1">
+                        <i class="fas fa-chalkboard-teacher fa-8x text-primary"></i>
+                        <h4 class="tsiram-font">Research and Projects</h4></br>
+                        <h5 class="tsiram-font analogous2">Current papers prestentations and projects</h5>
+                        <p class="left">If you would like to discuss collaboration or support of any of these projects, <a href="https://www.linkedin.com/in/gormanly/">please reach out on LinkedIn.</a></p>
+                        <p class="left"><strong>Research:</strong></p>
+                        <ul class="item-list">
+                            <li>Real-time Literature Recommendations from Large Language Models (Supported by the Marist/IBM Joint Study)</li>
+                            <li>Undergraduate Capping</li>
+                            <li>Graduate Capping</li>
+                        </ul>
+                        <p class="left"><strong>Software Projects:</strong></p>
+                        <ul class="item-list">
+                            <li>Agora</li>
+                            <li>Undergraduate Capping</li>
+                            <li>Graduate Capping</li>
+                        </ul>
+                        <a class="masthead-subheading homepageButton" href="/research">Research / Projects</a>
+                    </div>
+                    <div class="col col-lg-5 order-2">
+                        <img class="website-image website-image-95" src="/assets/img/home/system-architecture.png"/>
+                    </div>
+                </div>
+
+                <!-- <h2 class="page-section-heading text-center text-uppercase text-primary mb-3 pt-0"><a href="/dashboard">Create your account Today!</a> </h2> -->
                 <!-- Icon Divider-->
                 
     

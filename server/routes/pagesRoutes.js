@@ -21,6 +21,18 @@ router.route( '/about' )
     }
     );
 
+router.route( '/courses' )
+    .get( ( req, res ) => {
+        res.render( 'courses' );
+    }
+    );
+
+router.route( '/research' )
+    .get( ( req, res ) => {
+        res.render( 'research' );
+    }
+    );
+
 router.route( '/privacy' )
     .get( ( req, res ) => {
         res.render( './website/privacy' );

@@ -1,7 +1,7 @@
 <div class="container navbar-interior main-content">
     <span>
         <a class="navbar-brand js-scroll-trigger" href="/">
-            <img src="/assets/img/logos/Logo-400x400.png?text=big+logo" style="height:65px" /> &nbsp;&nbsp; <span class="primary tsiram-font">tsiram</span>
+            <img src="/assets/img/logos/0.3x/tsiram-logo-title@0.3x.png" style="height:95px" /> &nbsp;&nbsp;
         </a>
     </span>
     
@@ -14,14 +14,15 @@
     <div class="collapse navbar-collapse" id="navbarResponsive" style="padding-left: 3%;">
         <ul class="nav navbar-nav ml-auto tsiram-font" style="display:flex;">
 
-            <% if(!locals.authUser) { %>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/signIn">SIGN IN</a>
-                </li>
-            <% } %>
             
-            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
-                    href="/dashboard">DASHBOARD</a></li>
+            
+            
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/courses">COURSES</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/research">RESEARCH</a>
+            </li>
             <% if( process.env.PRODUCT_PAGE=='true' ) { %>
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/codebot">Products</a>
@@ -29,9 +30,22 @@
             <% } %>
             <% if( process.env.ABOUT_PAGE=='true' ) { %>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/about">ABOUT</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/about">PROF. G</a>
                 </li>
             <% } %>
+
+            <% if(locals.authUser) { %>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/dashboard">DASHBOARD</a>
+            </li>
+            <% } %>
+
+            <% if(!locals.authUser) { %>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/signIn">SIGN IN</a>
+                </li>
+            <% } %>
+
             <% if(locals.authUser) { %>
                 <li class="nav-item mx-0 mx-lg-1">
                     <%
