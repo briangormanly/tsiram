@@ -13,8 +13,8 @@ router.route( '/' )
     .get( ( req, res ) => {
         res.render( 'index' );
     }
-
     );
+
 router.route( '/about' )
     .get( ( req, res ) => {
         res.render( 'about' );
@@ -25,6 +25,24 @@ router.route( '/courses' )
     .get( ( req, res ) => {
         res.render( 'courses' );
     }
+    );
+
+router.route( '/courses/org-and-arch' )
+    .get( ( req, res ) => {
+        res.render( './course-resources/org-and-arch' );
+    }   
+    );
+
+router.route( '/courses/capping' )
+    .get( ( req, res ) => {
+        res.render( './course-resources/capping' );
+    }   
+    );
+
+router.route( '/courses/grad-is-capping' )
+    .get( ( req, res ) => {
+        res.render( './course-resources/grad-is-capping' );
+    }   
     );
 
 router.route( '/research' )
